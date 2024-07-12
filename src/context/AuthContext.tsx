@@ -4,7 +4,7 @@ import axios from "axios";
 import * as SecureStore from "expo-secure-store";
 import { useState } from "react";
 const Token_Key = "my-jwt";
-export const API_url = "https://api.developbetterapps.com/";
+export const API_url = "http://192.168.75.40:3003/api/auth/";
 export const AuthProvider = ({ children }: any) => {
   const [authState, setAuthState] = useState({
     token: null,
@@ -13,7 +13,7 @@ export const AuthProvider = ({ children }: any) => {
   useEffect(() => {
     const loadToken = async () => {
       const token = await SecureStore.getItemAsync(Token_Key);
-      console.log(token);
+      
       if (token) {
         axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 
@@ -23,25 +23,28 @@ export const AuthProvider = ({ children }: any) => {
     loadToken();
   }, []);
 
-  const Register = async (email: string, password: string) => {
+  const Register = async (firstName:string,lastName:string,mobile_number: string, password: string) => {
+    console.log(firstName,lastName,mobile_number,password);
     try {
-      return await axios.post(`${API_url}users`,{email:email, password:password });;
+      const result = await axios.post(`${API_url}register`,{first_name:firstName,last_name:lastName,mobile_number:mobile_number, password:password });
+      return result.data;
     } catch (e) {
-      return { error: true, msg: (e as any).response.data.msg };
+      return { msg:"unable to send request",error: true};
     }
   };
 
-  const Login = async (email: string, password: string) => {
+  const Login = async (mobile_number: string, password: string) => {
     try {
-      const result = await axios.post(`${API_url}auth`, { email, password });
+      const result = await axios.post(`${API_url}login`, { mobile_number, password });
+  
       setAuthState({ token: result.data.token, authenticated: true });
       axios.defaults.headers.common[
         "Authorization"
       ] = `Bearer ${result.data.token}`;
       await SecureStore.setItemAsync(Token_Key, result.data.token);
-      return result;
+      return result.data;
     } catch (e) {
-      return { error: true, msg: (e as any).response.data.msg };
+      return { error: true, msg:"unable to send request" };
     }
   };
 

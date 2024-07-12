@@ -19,7 +19,7 @@ export default function InputField({
           className="flex-grow py-0"
           placeholder={label}
           keyboardType={keyboardType}
-          secureTextEntry={true}
+          secureTextEntry={label==="Password"?true:false}
           value={value}
           onChangeText={OnchangeText}
         />

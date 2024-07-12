@@ -22,9 +22,9 @@ const social_buttons = [
   { name: "twitter", url: facebook },
 ];
 const LoginScreen = ({navigation}) => {
-const {Login} = useContext(AuthContext)
+const {Login} = useContext(AuthContext);
+const [mobile_number,setMobile] = useState();
 const [password,setpassword] = useState();
-const [email,setemail] = useState();
   return (
     <SafeAreaView className="flex flex-grow ">
   <View className="flex flex-col space-y-9  items-center justify-center p-5 h-full w-full">
@@ -32,18 +32,18 @@ const [email,setemail] = useState();
         <Text className="text-4xl  font-medium text-[#333] mb-10">Login</Text>
 
         <InputField
-          label={'Email ID'}
+          label={"Mobile Number"}
           icon={
             <MaterialIcons
-            name="alternate-email"
-            size={20}
-            color="#666"
-            style={{marginRight: 5}}
-          />
+              name="local-phone"
+              size={20}
+              color="#666"
+              style={{ marginRight: 5 }}
+            />
           }
-          keyboardType="email-address"
-          value={email}
-          OnchangeText = {text=>setemail(text)}
+          keyboardType="phone-pad"
+          value={mobile_number}
+          OnchangeText = {text=>setMobile(text)}
         />
 
 <InputField
@@ -61,9 +61,12 @@ const [email,setemail] = useState();
           OnchangeText = {text=>setpassword(text)}
         />
         
-        <CustomButton label={"Login"} onPress={async ()=>{const result = await Login(email,password)
-          if(result && result.error){
+        <CustomButton label={"Login"} onPress={async ()=>{const result = await Login(mobile_number,password)
+          if(result.error){
             alert(result.msg)
+          }
+          else{
+            alert(result.msg);
           }
         }} />
 

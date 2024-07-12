@@ -19,10 +19,11 @@ const social_buttons = [
 ];
 
 const RegisterScreen = ({ navigation }) => {
-const [full_name,setFullName] = useState();
+const [firstName,setFirstName] = useState();
+const [lastName,setLastName] = useState();
 const [password,setpassword] = useState();
 const [confirmpassword,setconfirmpassword] = useState();
-const [email,setemail] = useState();
+const [mobile_number,setMobile] = useState();
 const {Register}=useContext(AuthContext);
   return (
     <SafeAreaView className="flex flex-grow ">
@@ -52,7 +53,7 @@ const {Register}=useContext(AuthContext);
         </Text>
 
         <InputField
-          label={"Full Name"}
+          label={"First Name"}
           icon={
             <Ionicons
               name="person-outline"
@@ -61,23 +62,36 @@ const {Register}=useContext(AuthContext);
               style={{ marginRight: 5 }}
             />
           }
-          value ={full_name}
-          OnchangeText = {text =>setFullName(text)}
+          value ={firstName}
+          OnchangeText = {text =>setFirstName(text)}
         />
-
         <InputField
-          label={"Email ID"}
+          label={"Last Name"}
           icon={
-            <MaterialIcons
-              name="alternate-email"
+            <Ionicons
+              name="person-outline"
               size={20}
               color="#666"
               style={{ marginRight: 5 }}
             />
           }
-          keyboardType="email-address"
-          value={email}
-          OnchangeText = {text=>setemail(text)}
+          value ={lastName}
+          OnchangeText = {text =>setLastName(text)}
+        />
+
+        <InputField
+          label={"Mobile Number"}
+          icon={
+            <MaterialIcons
+              name="local-phone"
+              size={20}
+              color="#666"
+              style={{ marginRight: 5 }}
+            />
+          }
+          keyboardType="phone-pad"
+          value={mobile_number}
+          OnchangeText = {text=>setMobile(text)}
         />
 
         <InputField
@@ -111,14 +125,14 @@ const {Register}=useContext(AuthContext);
         />
 
         <CustomButton label={"Register"} onPress={async() => {if(confirmpassword===password){
-          console.log(email,password)
-          const result = await Register(email,password);
-          if(result && result.error){
+          console.log(mobile_number,password);
+          const result = await Register(firstName,lastName,mobile_number,password);
+          if(result.error){
             console.log("error")
-            alert(result.error);
+            alert(result.msg);
           }
           else{
-            alert("Registration successfull!, please login");
+            alert(result.msg);
             navigation.goBack();
           }
         }else{
